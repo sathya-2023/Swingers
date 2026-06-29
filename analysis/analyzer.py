@@ -26,21 +26,32 @@ def analyze(df):
     #     and monthly > 0
     # )
 
-    reasons = []
+    # reasons = []
+    strengths = []
+    weaknesses = []
 
-    if not above_ema50:
-        reasons.append("Below EMA50")
+    if above_ema50:
+        strengths.append("Above EMA50")
+    else:
+        weaknesses.append("Below EMA50")
 
-    if not above_ema200:
-        reasons.append("Below EMA200")
+    if weekly > 0:
+        strengths.append("Positive Weekly Momentum")
+    else:
+        weaknesses.append("Negative Weekly Momentum")
 
-    if weekly <= 0:
-        reasons.append("Negative Weekly Momentum")
+    if weekly > 0:
+        strengths.append("Positive Weekly Momentum")
+    else:
+        weaknesses.append("Negative Weekly Momentum")
 
-    if monthly <= 0:
-        reasons.append("Negative Monthly Momentum")
 
-    qualified = len(reasons) == 0
+    if monthly > 0:
+        strengths.append("Positive Monthly Momentum")
+    else:
+        weaknesses.append("Negative Monthly Momentum")
+
+    qualified = len(weaknesses) == 0
 
     return {
         "current_price": current_price,
@@ -56,8 +67,12 @@ def analyze(df):
 
         "avg_volume": volume,
 
-        "reasons": reasons,
+        # "reasons": reasons,
         
+        "qualified": qualified,
+        
+        "strengths": strengths,
+        "weaknesses": weaknesses,
         "qualified": qualified
-        
+
     }

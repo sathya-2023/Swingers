@@ -93,14 +93,50 @@
 
 
 # ------------------Sprint 5----------------------
-from core.history_service import get_daily_history
-from analysis.analyzer import analyze
+# from core.history_service import get_daily_history
+# from analysis.analyzer import analyze
 
-history = get_daily_history("HCLTECH")
+# history = get_daily_history("PIXTRANS")
 
-result = analyze(history)
+# result = analyze(history)
 
-print()
+# print()
 
-for key, value in result.items():
-    print(f"{key}: {value}")
+# for key, value in result.items():
+#     print(f"{key}: {value}")
+    
+# ---------------Sprint 6----------------------
+from core.universe_service import load_universe
+from scanner.scanner_v1 import scan
+
+stocks = load_universe("nifty50")
+
+results = scan(stocks)
+
+for stock in results:
+
+    print()
+    print("=" * 40)
+    print(stock["symbol"])
+    print(
+            "PASS"
+            if stock["qualified"]
+            else "FAIL"
+        )
+    print()
+    print("Strengths:")
+    print(stock["strengths"])
+    
+    print()
+    print("Weaknesses:")
+    print(stock["weaknesses"])
+    print()
+
+# -------------------adding universes-----------------------
+# from core.universe_service import load_universe
+
+# stocks = load_universe("nifty50")
+
+# print(stocks)
+# print()
+# print(f"Total stocks: {len(stocks)}")
