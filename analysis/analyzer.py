@@ -2,6 +2,7 @@ from indicators.ema import calculate_ema
 from indicators.returns import weekly_return
 from indicators.returns import monthly_return
 from indicators.volume import average_volume
+from ranking.scorer import score
 
 
 def analyze(df):
@@ -52,6 +53,13 @@ def analyze(df):
         weaknesses.append("Negative Monthly Momentum")
 
     qualified = len(weaknesses) == 0
+    
+    ranking_score = score({
+        "above_ema50": above_ema50,
+        "above_ema200": above_ema200,
+        "weekly_return": weekly,
+        "monthly_return": monthly
+    })
 
     return {
         "current_price": current_price,
@@ -73,6 +81,7 @@ def analyze(df):
         
         "strengths": strengths,
         "weaknesses": weaknesses,
-        "qualified": qualified
+        "qualified": qualified,
+        "score": ranking_score
 
     }

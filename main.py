@@ -123,6 +123,10 @@ for stock in results:
             if stock["qualified"]
             else "FAIL"
         )
+    
+    print()
+    print("Score:", stock["score"])
+    
     print()
     print("Strengths:")
     print(stock["strengths"])
