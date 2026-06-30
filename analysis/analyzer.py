@@ -4,6 +4,7 @@ from indicators.returns import monthly_return
 from indicators.volume import average_volume
 from ranking.scorer import score
 from ranking.relative_strength import calculate_relative_strength
+from indicators.fifty_two_week import (fifty_two_week_high, distance_from_52w_high)
 
 
 def analyze(df):
@@ -17,6 +18,9 @@ def analyze(df):
     monthly = monthly_return(df)
 
     volume = average_volume(df)
+    
+    high_52w = fifty_two_week_high(df)
+    distance_52w = distance_from_52w_high(df)
 
     above_ema50 = current_price > ema50
     above_ema200 = current_price > ema200
@@ -36,6 +40,16 @@ def analyze(df):
         strengths.append("Above EMA50")
     else:
         weaknesses.append("Below EMA50")
+        
+    if above_ema200:
+        strengths.append("Above EMA200")
+    else:
+        weaknesses.append("Below EMA200")
+
+    if distance_52w >= -10:
+        strengths.append("Close to 52W High")
+    else:
+        weaknesses.append("Far from 52W High")
 
     if weekly > 0:
         strengths.append("Positive Weekly Momentum")
@@ -76,6 +90,8 @@ def analyze(df):
         "avg_volume": volume,
 
         # "reasons": reasons,
+        "high_52w": high_52w,
+        "distance_52w": distance_52w,
         
         "qualified": qualified,
         

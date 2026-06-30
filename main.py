@@ -105,10 +105,9 @@
 # for key, value in result.items():
 #     print(f"{key}: {value}")
     
-# ---------------Sprint 6----------------------
+# ---------------Sprint 10----------------------
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
-
 
 stocks = load_universe("nifty50")
 
@@ -120,11 +119,11 @@ results = sorted(
     )
 
 for stock in results:
-
+    
     print()
     print("=" * 40)
     
-    print(stock["symbol"])
+    print(stock["symbol"],"= " , stock["current_price"])
     print(f"Score: {stock["score"]}")
     print(f"RS: {stock["relative_strength"]:.2f}")
     
@@ -133,6 +132,10 @@ for stock in results:
             if stock["qualified"]
             else "FAIL"
     )
+    
+    print()
+    print(f"52w High: {stock["high_52w"]:.2f}")
+    print(f"Distance from 52w High: {stock["distance_52w"]:.2f}%")
     
     print()
     
