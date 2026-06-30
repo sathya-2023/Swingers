@@ -105,7 +105,7 @@
 # for key, value in result.items():
 #     print(f"{key}: {value}")
     
-# ---------------Sprint 10----------------------
+# ---------------Sprint 11----------------------
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
 
@@ -147,6 +147,9 @@ for stock in results:
     print("Weaknesses:")
     print(stock["weaknesses"])
     print()
+    
+    print(f"Consolidating: " 
+          f"{stock['consolidation_range']: .2f}%")
 
 # -------------------adding universes-----------------------
 # from core.universe_service import load_universe

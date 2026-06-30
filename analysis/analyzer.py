@@ -5,7 +5,7 @@ from indicators.volume import average_volume
 from ranking.scorer import score
 from ranking.relative_strength import calculate_relative_strength
 from indicators.fifty_two_week import (fifty_two_week_high, distance_from_52w_high)
-
+from indicators.consolidation import detect_consolidation
 
 def analyze(df):
 
@@ -21,6 +21,8 @@ def analyze(df):
     
     high_52w = fifty_two_week_high(df)
     distance_52w = distance_from_52w_high(df)
+    
+    consolidating, consolidation_range = detect_consolidation(df)
 
     above_ema50 = current_price > ema50
     above_ema200 = current_price > ema200
@@ -60,6 +62,9 @@ def analyze(df):
         strengths.append("Positive Monthly Momentum")
     else:
         weaknesses.append("Negative Monthly Momentum")
+        
+    if consolidating:
+        strengths.append("Consolidating")  
 
     qualified = len(weaknesses) == 0
     
@@ -99,6 +104,9 @@ def analyze(df):
         "weaknesses": weaknesses,
         "qualified": qualified,
         "score": ranking_score,
-        "relative_strength": relative_strength
+        "relative_strength": relative_strength,
+        
+        "consolidating": consolidating,
+        "consolidation_range": consolidation_range,
 
     }
