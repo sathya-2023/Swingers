@@ -109,29 +109,38 @@
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
 
+
 stocks = load_universe("nifty50")
 
 results = scan(stocks)
+results = sorted(
+    results,
+    key=lambda x: x["score"],
+    reverse=True
+    )
 
 for stock in results:
 
     print()
     print("=" * 40)
+    
     print(stock["symbol"])
+    print(f"Score: {stock["score"]}")
+    print(f"RS: {stock["relative_strength"]:.2f}")
+    
     print(
             "PASS"
             if stock["qualified"]
             else "FAIL"
-        )
+    )
     
     print()
-    print("Score:", stock["score"])
     
-    print()
     print("Strengths:")
     print(stock["strengths"])
     
     print()
+    
     print("Weaknesses:")
     print(stock["weaknesses"])
     print()

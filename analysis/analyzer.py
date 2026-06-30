@@ -3,6 +3,7 @@ from indicators.returns import weekly_return
 from indicators.returns import monthly_return
 from indicators.volume import average_volume
 from ranking.scorer import score
+from ranking.relative_strength import calculate_relative_strength
 
 
 def analyze(df):
@@ -40,13 +41,7 @@ def analyze(df):
         strengths.append("Positive Weekly Momentum")
     else:
         weaknesses.append("Negative Weekly Momentum")
-
-    if weekly > 0:
-        strengths.append("Positive Weekly Momentum")
-    else:
-        weaknesses.append("Negative Weekly Momentum")
-
-
+        
     if monthly > 0:
         strengths.append("Positive Monthly Momentum")
     else:
@@ -57,6 +52,11 @@ def analyze(df):
     ranking_score = score({
         "above_ema50": above_ema50,
         "above_ema200": above_ema200,
+        "weekly_return": weekly,
+        "monthly_return": monthly
+    })
+
+    relative_strength = calculate_relative_strength({
         "weekly_return": weekly,
         "monthly_return": monthly
     })
@@ -82,6 +82,7 @@ def analyze(df):
         "strengths": strengths,
         "weaknesses": weaknesses,
         "qualified": qualified,
-        "score": ranking_score
+        "score": ranking_score,
+        "relative_strength": relative_strength
 
     }
