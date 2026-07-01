@@ -105,7 +105,7 @@
 # for key, value in result.items():
 #     print(f"{key}: {value}")
     
-# ---------------Sprint 12 - adding breakout engine----------------------
+# ---------------Sprint 13 - adding Volume Expansion----------------------
 
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
@@ -213,6 +213,38 @@ for stock in results:
     print(
         "Pass:",
         stock["breakout"]["passed"]
+    )
+    
+    print("\nVolume Expansion:")
+
+    print(
+        "Recent Volume:",
+        stock["volume_expansion"]["recent_volume"]
+    )
+
+    print(
+        "Average Volume:",
+        stock["volume_expansion"]["average_volume"]
+    )
+
+    print(
+        "Volume Ratio:",
+        stock["volume_expansion"]["volume_ratio"]
+    )
+
+    print(
+        "Status:",
+        stock["volume_expansion"]["status"]
+    )
+
+    print(
+        "Score:",
+        stock["volume_expansion"]["score"]
+    )
+
+    print(
+        "Confirmation:",
+        stock["volume_expansion"]["passed"]
     )
 
 # -------------------adding universes-----------------------

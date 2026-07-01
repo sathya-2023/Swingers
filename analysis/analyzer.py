@@ -7,6 +7,7 @@ from ranking.relative_strength import calculate_relative_strength
 from indicators.fifty_two_week import (fifty_two_week_high, distance_from_52w_high)
 from indicators.consolidation import detect_consolidation
 from indicators.breakout import detect_breakout
+from indicators.volume_expansion import detect_volume_expansion
 
 def analyze(df):
 
@@ -33,6 +34,8 @@ def analyze(df):
         current_price,
         consolidation["resistance_price"]
     )
+    
+    volume_expansion = detect_volume_expansion(df)
 
     above_ema50 = current_price > ema50
     above_ema200 = current_price > ema200
@@ -75,8 +78,25 @@ def analyze(df):
         
     if consolidating:
         strengths.append("Consolidating")  
+    
 
-    qualified = len(weaknesses) == 0
+    qualified = (
+
+        above_ema50
+
+        and above_ema200
+
+        and distance_52w >= -10
+
+        and weekly > 0
+
+        and monthly > 0
+
+        and consolidating
+
+        and breakout["passed"]
+
+    )
     
     ranking_score = score({
         "above_ema50": above_ema50,
@@ -122,5 +142,7 @@ def analyze(df):
         "consolidation": consolidation,
         
         "breakout": breakout,
+        
+        "volume_expansion": volume_expansion,
 
     }
