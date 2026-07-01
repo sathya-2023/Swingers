@@ -22,7 +22,11 @@ def analyze(df):
     high_52w = fifty_two_week_high(df)
     distance_52w = distance_from_52w_high(df)
     
-    consolidating, consolidation_range = detect_consolidation(df)
+    # consolidating, consolidation_range = detect_consolidation(df)
+
+    consolidation = detect_consolidation(df)
+    consolidating = consolidation["consolidating"]
+    consolidation_range = consolidation["range_pct"]
 
     above_ema50 = current_price > ema50
     above_ema200 = current_price > ema200
@@ -108,5 +112,7 @@ def analyze(df):
         
         "consolidating": consolidating,
         "consolidation_range": consolidation_range,
+
+        "consolidation": consolidation,
 
     }

@@ -6,7 +6,6 @@ def detect_consolidation(
     recent = df.tail(lookback)
 
     highest = recent["high"].max()
-
     lowest = recent["low"].min()
 
     consolidation_range = (
@@ -19,7 +18,24 @@ def detect_consolidation(
         <= threshold
     )
 
-    return (
-        consolidating,
-        consolidation_range
-    )
+    start_index = len(df) - lookback
+    end_index = len(df) - 1
+
+    return {
+        "consolidating": consolidating,
+
+        "range_pct": round(
+            consolidation_range,
+            2
+        ),
+
+        "candles": lookback,
+
+        "start_index": start_index,
+
+        "end_index": end_index,
+
+        "support": lowest,
+
+        "resistance": highest
+    }

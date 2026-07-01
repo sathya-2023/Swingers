@@ -105,9 +105,12 @@
 # for key, value in result.items():
 #     print(f"{key}: {value}")
     
-# ---------------Sprint 11----------------------
+# ---------------Sprint 12----------------------
+from unittest import result
+
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
+
 
 stocks = load_universe("nifty50")
 
@@ -150,6 +153,33 @@ for stock in results:
     
     print(f"Consolidating: " 
           f"{stock['consolidation_range']: .2f}%")
+
+    print("\nConsolidation Details:")
+
+    print(
+        "Support:",
+        stock["consolidation"]["support"]
+    )
+
+    print(
+        "Resistance:",
+        stock["consolidation"]["resistance"]
+    )
+
+    print(
+        "Candles:",
+        stock["consolidation"]["candles"]
+    )
+
+    print(
+        "Start:",
+        stock["consolidation"]["start_index"]
+    )
+
+    print(
+        "End:",
+        stock["consolidation"]["end_index"]
+    )
 
 # -------------------adding universes-----------------------
 # from core.universe_service import load_universe
