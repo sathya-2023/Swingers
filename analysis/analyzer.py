@@ -6,6 +6,7 @@ from ranking.scorer import score
 from ranking.relative_strength import calculate_relative_strength
 from indicators.fifty_two_week import (fifty_two_week_high, distance_from_52w_high)
 from indicators.consolidation import detect_consolidation
+from indicators.breakout import detect_breakout
 
 def analyze(df):
 
@@ -27,6 +28,11 @@ def analyze(df):
     consolidation = detect_consolidation(df)
     consolidating = consolidation["consolidating"]
     consolidation_range = consolidation["range_pct"]
+    
+    breakout = detect_breakout(
+        current_price,
+        consolidation["resistance_price"]
+    )
 
     above_ema50 = current_price > ema50
     above_ema200 = current_price > ema200
@@ -114,5 +120,7 @@ def analyze(df):
         "consolidation_range": consolidation_range,
 
         "consolidation": consolidation,
+        
+        "breakout": breakout,
 
     }

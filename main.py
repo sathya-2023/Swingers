@@ -105,8 +105,7 @@
 # for key, value in result.items():
 #     print(f"{key}: {value}")
     
-# ---------------Sprint 12----------------------
-from unittest import result
+# ---------------Sprint 12 - adding breakout engine----------------------
 
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
@@ -122,7 +121,6 @@ results = sorted(
     )
 
 for stock in results:
-    
     print()
     print("=" * 40)
     
@@ -152,18 +150,21 @@ for stock in results:
     print()
     
     print(f"Consolidating: " 
-          f"{stock['consolidation_range']: .2f}%")
+        f"{stock['consolidation_range']: .2f}%")
+
+
+
 
     print("\nConsolidation Details:")
 
     print(
         "Support:",
-        stock["consolidation"]["support"]
+        stock["consolidation"]["support_price"]
     )
 
     print(
         "Resistance:",
-        stock["consolidation"]["resistance"]
+        stock["consolidation"]["resistance_price"]
     )
 
     print(
@@ -179,6 +180,39 @@ for stock in results:
     print(
         "End:",
         stock["consolidation"]["end_index"]
+    )
+    
+    print("\nBreakout Details:")
+
+    print(
+        "Resistance:",
+        stock["breakout"]["resistance_price"]
+    )
+
+    print(
+        "Current:",
+        stock["breakout"]["current_price"]
+    )
+
+    print(
+        "Distance:",
+        stock["breakout"]["distance"],
+        "%"
+    )
+
+    print(
+        "Status:",
+        stock["breakout"]["status"]
+    )
+
+    print(
+        "Score:",
+        stock["breakout"]["score"]
+    )
+
+    print(
+        "Pass:",
+        stock["breakout"]["passed"]
     )
 
 # -------------------adding universes-----------------------

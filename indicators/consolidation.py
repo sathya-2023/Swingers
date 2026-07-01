@@ -5,12 +5,12 @@ def detect_consolidation(
 
     recent = df.tail(lookback)
 
-    highest = recent["high"].max()
-    lowest = recent["low"].min()
+    resistance_price = recent["close"].max()
+    support_price = recent["close"].min()
 
     consolidation_range = (
-        (highest - lowest)
-        / lowest
+        (resistance_price - support_price)
+        / support_price
     ) * 100
 
     consolidating = (
@@ -35,7 +35,7 @@ def detect_consolidation(
 
         "end_index": end_index,
 
-        "support": lowest,
+        "support_price": support_price,
 
-        "resistance": highest
+        "resistance_price": resistance_price
     }
