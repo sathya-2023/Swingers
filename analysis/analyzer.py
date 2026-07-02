@@ -8,6 +8,7 @@ from indicators.fifty_two_week import (fifty_two_week_high, distance_from_52w_hi
 from indicators.consolidation import detect_consolidation
 from indicators.breakout import detect_breakout
 from indicators.volume_expansion import detect_volume_expansion
+from planner.trade_planner import create_trade_plan
 
 def analyze(df):
 
@@ -32,6 +33,11 @@ def analyze(df):
     
     breakout = detect_breakout(
         current_price,
+        consolidation["resistance_price"]
+    )
+    
+    trade_plan = create_trade_plan(
+        consolidation["support_price"],
         consolidation["resistance_price"]
     )
     
@@ -142,6 +148,8 @@ def analyze(df):
         "consolidation": consolidation,
         
         "breakout": breakout,
+        
+        "trade_plan": trade_plan,
         
         "volume_expansion": volume_expansion,
 

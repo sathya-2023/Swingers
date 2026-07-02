@@ -105,7 +105,7 @@
 # for key, value in result.items():
 #     print(f"{key}: {value}")
     
-# ---------------Sprint 13 - adding Volume Expansion----------------------
+# ---------------Sprint 14 - Trade Planner----------------------
 
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
@@ -215,6 +215,7 @@ for stock in results:
         stock["breakout"]["passed"]
     )
     
+    
     print("\nVolume Expansion:")
 
     print(
@@ -245,6 +246,41 @@ for stock in results:
     print(
         "Confirmation:",
         stock["volume_expansion"]["passed"]
+    )
+    
+    
+    print("\nTrade Plan:")
+
+    print(
+        "Entry:",
+        stock["trade_plan"]["entry"]
+    )
+
+    print(
+        "Stop:",
+        stock["trade_plan"]["stop"]
+    )
+
+    print(
+        "Target:",
+        stock["trade_plan"]["target"]
+    )
+
+    print(
+        "Risk:",
+        stock["trade_plan"]["risk_pct"],
+        "%"
+    )
+
+    print(
+        "Reward:",
+        stock["trade_plan"]["reward_pct"],
+        "%"
+    )
+
+    print(
+        "RR:",
+        stock["trade_plan"]["rr"]
     )
 
 # -------------------adding universes-----------------------
