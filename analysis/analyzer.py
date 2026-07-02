@@ -9,6 +9,7 @@ from indicators.consolidation import detect_consolidation
 from indicators.breakout import detect_breakout
 from indicators.volume_expansion import detect_volume_expansion
 from planner.trade_planner import create_trade_plan
+from ranking.final_score import calculate_final_score
 
 def analyze(df):
 
@@ -116,9 +117,50 @@ def analyze(df):
         "monthly_return": monthly
     })
 
-    return {
-        "current_price": current_price,
+    # return {
+    #     "current_price": current_price,
         
+    #     "ema50": ema50,
+    #     "ema200": ema200,
+
+    #     "above_ema50": above_ema50,
+    #     "above_ema200": above_ema200,
+
+    #     "weekly_return": weekly,
+    #     "monthly_return": monthly,
+
+    #     "avg_volume": volume,
+
+    #     # "reasons": reasons,
+    #     "high_52w": high_52w,
+    #     "distance_52w": distance_52w,
+        
+    #     "qualified": qualified,
+        
+    #     "strengths": strengths,
+    #     "weaknesses": weaknesses,
+    #     "qualified": qualified,
+    #     "score": ranking_score,
+    #     "relative_strength": relative_strength,
+        
+    #     "consolidating": consolidating,
+    #     "consolidation_range": consolidation_range,
+
+    #     "consolidation": consolidation,
+        
+    #     "breakout": breakout,
+        
+    #     "trade_plan": trade_plan,
+        
+    #     "volume_expansion": volume_expansion,
+
+    # }
+    
+    
+    stock_data = {
+
+        "current_price": current_price,
+
         "ema50": ema50,
         "ema200": ema200,
 
@@ -130,27 +172,34 @@ def analyze(df):
 
         "avg_volume": volume,
 
-        # "reasons": reasons,
         "high_52w": high_52w,
         "distance_52w": distance_52w,
-        
+
         "qualified": qualified,
-        
+
         "strengths": strengths,
         "weaknesses": weaknesses,
-        "qualified": qualified,
+
         "score": ranking_score,
+
         "relative_strength": relative_strength,
-        
+
         "consolidating": consolidating,
         "consolidation_range": consolidation_range,
 
         "consolidation": consolidation,
-        
+
         "breakout": breakout,
-        
-        "trade_plan": trade_plan,
-        
+
         "volume_expansion": volume_expansion,
 
+        "trade_plan": trade_plan,
     }
+    
+    stock_data["final_score"] = (
+        calculate_final_score(
+            stock_data
+        )
+    )
+    
+    return stock_data

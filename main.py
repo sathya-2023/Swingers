@@ -1,112 +1,3 @@
-# from config import (
-#     UPSTOX_API_KEY,
-#     UPSTOX_API_SECRET,
-#     UPSTOX_REDIRECT_URI,
-#     UPSTOX_ACCESS_TOKEN,
-# )
-
-# print("=" * 50)
-# print("Swingers")
-# print("=" * 50)
-
-# print(f"API Key Loaded          : {'Yes' if UPSTOX_API_KEY else 'No'}")
-# print(f"API Secret Loaded       : {'Yes' if UPSTOX_API_SECRET else 'No'}")
-# print(f"Redirect URI Loaded     : {'Yes' if UPSTOX_REDIRECT_URI else 'No'}")
-# print(f"Access Token Loaded     : {'Yes' if UPSTOX_ACCESS_TOKEN else 'No'}")
-
-# =================================================
-
-# # from config import UPSTOX_ACCESS_TOKEN
-
-# # print(UPSTOX_ACCESS_TOKEN[:20])
-
-# ===========================================
-# from core.history_service import get_daily_history
-
-# history = get_daily_history("HCLTECH")
-
-# print(type(history))
-# print(history)
-
-# --------------------------------------
-# print(type(history))
-# print()
-
-# print("Number of candles:")
-# print(len(history.data.candles))
-# print()
-
-# print("Latest candle:")
-# print(history.data.candles[0])
-# print()
-
-# print("Oldest candle:")
-# print(history.data.candles[-1])
-
-# ___________Sprint 4_____________________
-
-# from core.history_service import get_daily_history
-
-# from indicators.ema import calculate_ema
-# from indicators.returns import weekly_return
-# from indicators.returns import monthly_return
-# from indicators.volume import average_volume
-
-# history = get_daily_history("HCLTECH")
-
-# current_price = history["close"].iloc[-1]
-
-# ema50 = calculate_ema(history, 50)
-# ema200 = calculate_ema(history, 200)
-
-# weekly = weekly_return(history)
-# monthly = monthly_return(history)
-
-# volume = average_volume(history)
-
-# print("=" * 40)
-# print("HCLTECH")
-# print("=" * 40)
-
-# print()
-
-# print(f"Current Price : {current_price:.2f}")
-
-# print()
-
-# print(f"EMA50         : {ema50:.2f}")
-# print(f"EMA200        : {ema200:.2f}")
-
-# print()
-
-# print(f"Above EMA50   : {current_price > ema50}")
-# print(f"Above EMA200  : {current_price > ema200}")
-
-# print()
-
-# print(f"Weekly Return : {weekly:.2f}%")
-# print(f"Monthly Return: {monthly:.2f}%")
-
-# print()
-
-# print(f"Avg Volume    : {volume:,.0f}")
-
-
-# ------------------Sprint 5----------------------
-# from core.history_service import get_daily_history
-# from analysis.analyzer import analyze
-
-# history = get_daily_history("PIXTRANS")
-
-# result = analyze(history)
-
-# print()
-
-# for key, value in result.items():
-#     print(f"{key}: {value}")
-    
-# ---------------Sprint 14 - Trade Planner----------------------
-
 from core.universe_service import load_universe
 from scanner.scanner_v1 import scan
 
@@ -114,142 +5,69 @@ from scanner.scanner_v1 import scan
 stocks = load_universe("nifty50")
 
 results = scan(stocks)
+
+results = [
+    stock
+    for stock in results
+    if stock["qualified"]
+]
+
 results = sorted(
     results,
-    key=lambda x: x["score"],
+    key=lambda x:
+        x["final_score"],
     reverse=True
-    )
+)
 
-for stock in results:
+print()
+print(
+    f"Qualified Candidates: "
+    f"{len(results)}"
+)
+print()
+
+print()
+print("=" * 70)
+
+print(
+    f"{'RANK':<6}"
+    f"{'STOCK':<15}"
+    f"{'FINAL':<10}"
+    f"{'RS':<10}"
+    f"{'BREAKOUT':<15}"
+    f"{'RR':<10}"
+)
+
+print("=" * 70)
+
+for i, stock in enumerate(results):
+
+    print(
+        f"{i+1:<6}"
+        f"{stock['symbol']:<15}"
+        f"{stock['final_score']:<10}"
+        f"{round(stock['relative_strength'],2):<10}"
+        f"{stock['breakout']['status']:<15}"
+        f"{stock['trade_plan']['rr']:<10}"
+    )
+    
+    
+best = results[0]
+
+print()
+print("=" * 50)
+print("BEST TRADE THIS WEEK")
+
+top_results = results[:3]
+
+for stock in top_results:
+
     print()
-    print("=" * 40)
-    
-    print(stock["symbol"],"= " , stock["current_price"])
-    print(f"Score: {stock["score"]}")
-    print(f"RS: {stock["relative_strength"]:.2f}")
-    
-    print(
-            "PASS"
-            if stock["qualified"]
-            else "FAIL"
-    )
-    
+    print("=" * 50)
+
+    print(stock["symbol"])
+
     print()
-    print(f"52w High: {stock["high_52w"]:.2f}")
-    print(f"Distance from 52w High: {stock["distance_52w"]:.2f}%")
-    
-    print()
-    
-    print("Strengths:")
-    print(stock["strengths"])
-    
-    print()
-    
-    print("Weaknesses:")
-    print(stock["weaknesses"])
-    print()
-    
-    print(f"Consolidating: " 
-        f"{stock['consolidation_range']: .2f}%")
-
-
-
-
-    print("\nConsolidation Details:")
-
-    print(
-        "Support:",
-        stock["consolidation"]["support_price"]
-    )
-
-    print(
-        "Resistance:",
-        stock["consolidation"]["resistance_price"]
-    )
-
-    print(
-        "Candles:",
-        stock["consolidation"]["candles"]
-    )
-
-    print(
-        "Start:",
-        stock["consolidation"]["start_index"]
-    )
-
-    print(
-        "End:",
-        stock["consolidation"]["end_index"]
-    )
-    
-    print("\nBreakout Details:")
-
-    print(
-        "Resistance:",
-        stock["breakout"]["resistance_price"]
-    )
-
-    print(
-        "Current:",
-        stock["breakout"]["current_price"]
-    )
-
-    print(
-        "Distance:",
-        stock["breakout"]["distance"],
-        "%"
-    )
-
-    print(
-        "Status:",
-        stock["breakout"]["status"]
-    )
-
-    print(
-        "Score:",
-        stock["breakout"]["score"]
-    )
-
-    print(
-        "Pass:",
-        stock["breakout"]["passed"]
-    )
-    
-    
-    print("\nVolume Expansion:")
-
-    print(
-        "Recent Volume:",
-        stock["volume_expansion"]["recent_volume"]
-    )
-
-    print(
-        "Average Volume:",
-        stock["volume_expansion"]["average_volume"]
-    )
-
-    print(
-        "Volume Ratio:",
-        stock["volume_expansion"]["volume_ratio"]
-    )
-
-    print(
-        "Status:",
-        stock["volume_expansion"]["status"]
-    )
-
-    print(
-        "Score:",
-        stock["volume_expansion"]["score"]
-    )
-
-    print(
-        "Confirmation:",
-        stock["volume_expansion"]["passed"]
-    )
-    
-    
-    print("\nTrade Plan:")
 
     print(
         "Entry:",
@@ -267,27 +85,204 @@ for stock in results:
     )
 
     print(
-        "Risk:",
-        stock["trade_plan"]["risk_pct"],
-        "%"
-    )
-
-    print(
-        "Reward:",
-        stock["trade_plan"]["reward_pct"],
-        "%"
-    )
-
-    print(
         "RR:",
         stock["trade_plan"]["rr"]
     )
 
-# -------------------adding universes-----------------------
-# from core.universe_service import load_universe
+    print(
+        "Breakout:",
+        stock["breakout"]["status"]
+    )
 
-# stocks = load_universe("nifty50")
+    print(
+        "Volume:",
+        stock["volume_expansion"]["status"]
+    )
 
-# print(stocks)
-# print()
-# print(f"Total stocks: {len(stocks)}")
+
+# for stock in results:
+#     # print()
+#     # print("=" * 40)
+    
+#     # print(stock["symbol"],"= " , stock["current_price"])
+#     # print(f"Score: {stock["score"]}")
+#     # print(f"RS: {stock["relative_strength"]:.2f}")
+    
+#     # print(
+#     #         "PASS"
+#     #         if stock["qualified"]
+#     #         else "FAIL"
+#     # )
+    
+#     # print()
+#     # print(f"52w High: {stock["high_52w"]:.2f}")
+#     # print(f"Distance from 52w High: {stock["distance_52w"]:.2f}%")
+    
+#     # print()
+    
+#     # print("Strengths:")
+#     # print(stock["strengths"])
+    
+#     # print()
+    
+#     # print("Weaknesses:")
+#     # print(stock["weaknesses"])
+#     # print()
+    
+#     # print(f"Consolidating: " 
+#     #     f"{stock['consolidation_range']: .2f}%")
+
+
+
+
+#     # print("\nConsolidation Details:")
+
+#     # print(
+#     #     "Support:",
+#     #     stock["consolidation"]["support_price"]
+#     # )
+
+#     # print(
+#     #     "Resistance:",
+#     #     stock["consolidation"]["resistance_price"]
+#     # )
+
+#     # print(
+#     #     "Candles:",
+#     #     stock["consolidation"]["candles"]
+#     # )
+
+#     # print(
+#     #     "Start:",
+#     #     stock["consolidation"]["start_index"]
+#     # )
+
+#     # print(
+#     #     "End:",
+#     #     stock["consolidation"]["end_index"]
+#     # )
+    
+#     # print("\nBreakout Details:")
+
+#     # print(
+#     #     "Resistance:",
+#     #     stock["breakout"]["resistance_price"]
+#     # )
+
+#     # print(
+#     #     "Current:",
+#     #     stock["breakout"]["current_price"]
+#     # )
+
+#     # print(
+#     #     "Distance:",
+#     #     stock["breakout"]["distance"],
+#     #     "%"
+#     # )
+
+#     # print(
+#     #     "Status:",
+#     #     stock["breakout"]["status"]
+#     # )
+
+#     # print(
+#     #     "Score:",
+#     #     stock["breakout"]["score"]
+#     # )
+
+#     # print(
+#     #     "Pass:",
+#     #     stock["breakout"]["passed"]
+#     # )
+    
+    
+#     # print("\nVolume Expansion:")
+
+#     # print(
+#     #     "Recent Volume:",
+#     #     stock["volume_expansion"]["recent_volume"]
+#     # )
+
+#     # print(
+#     #     "Average Volume:",
+#     #     stock["volume_expansion"]["average_volume"]
+#     # )
+
+#     # print(
+#     #     "Volume Ratio:",
+#     #     stock["volume_expansion"]["volume_ratio"]
+#     # )
+
+#     # print(
+#     #     "Status:",
+#     #     stock["volume_expansion"]["status"]
+#     # )
+
+#     # print(
+#     #     "Score:",
+#     #     stock["volume_expansion"]["score"]
+#     # )
+
+#     # print(
+#     #     "Confirmation:",
+#     #     stock["volume_expansion"]["passed"]
+#     # )
+    
+    
+#     # print("\nTrade Plan:")
+
+#     # print(
+#     #     "Entry:",
+#     #     stock["trade_plan"]["entry"]
+#     # )
+
+#     # print(
+#     #     "Stop:",
+#     #     stock["trade_plan"]["stop"]
+#     # )
+
+#     # print(
+#     #     "Target:",
+#     #     stock["trade_plan"]["target"]
+#     # )
+
+#     # print(
+#     #     "Risk:",
+#     #     stock["trade_plan"]["risk_pct"],
+#     #     "%"
+#     # )
+
+#     # print(
+#     #     "Reward:",
+#     #     stock["trade_plan"]["reward_pct"],
+#     #     "%"
+#     # )
+
+#     # print(
+#     #     "RR:",
+#     #     stock["trade_plan"]["rr"]
+#     # )
+#     # print(stock["symbol"], stock["final_score"])
+    
+#     print()
+#     print("=" * 70)
+#     print(
+#         f"{'RANK':<6}"
+#         f"{'STOCK':<15}"
+#         f"{'FINAL':<10}"
+#         f"{'RS':<10}"
+#         f"{'BREAKOUT':<15}"
+#         f"{'RR':<10}"
+#     )
+#     print("=" * 70)
+
+#     for i, stock in enumerate(results):
+
+#         print(
+#             f"{i+1:<6}"
+#             f"{stock['symbol']:<15}"
+#             f"{stock['final_score']:<10}"
+#             f"{round(stock['relative_strength'],2):<10}"
+#             f"{stock['breakout']['status']:<15}"
+#             f"{stock['trade_plan']['rr']:<10}"
+#         )

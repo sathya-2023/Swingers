@@ -8,7 +8,7 @@ def scan(stocks):
 
     for stock in stocks:
 
-        print(f"Analyzing {stock}...")
+        # print(f"Analyzing {stock}...")
 
         try:
 
